@@ -1,0 +1,39 @@
+
+
+  <div class="login-form" [formGroup]="form">
+
+    <h3>Login</h3>
+
+  
+
+  <div class="form-actions">
+    <button class="btn" routerLink="/home">Home</button>
+
+    <button class="btn" (click)="loadCourses()">
+      Login
+    </button>
+
+  </div>
+
+  <div *ngFor="let item of myRoot1 "  width:500px>           
+   
+    {{item.name}} <br>
+    
+     {{item.brand}} <br>
+     {{item.street}}   {{item.houseNumber}} <br>
+     
+     {{item.postCode}} {{item.place}} <br>
+     
+     <label> Geöfnet </label>  {{item.isOpen}}<br>
+
+     <label> benzin e5 Preis: </label> {{item.e5}}  <label> EURO </label><br>
+     <label> benzin e10 Preis: </label> {{item.e10}}  <label> EURO </label><br>
+    <label> diesel Preeis:  </label> {{item.diesel}} <label> EURO </label><br>
+     {{item.state}} <br>
+    <label>#####################################################################################################</label>
+   
+   
+   </div>
+
+
+  
