@@ -5,6 +5,7 @@ import {firstValueFrom, Observable} from "rxjs";
 import {Course,TankRoot,Tank, } from "../models/course.model";
 import {GetCoursesResponse, GetTankResponse} from "../models/get-courses.response";
 import {SkipLoading} from "../loading/skip-loading.component";
+import { Root5 } from "../models/user.model";
 
 
 @Injectable({
@@ -27,6 +28,16 @@ response:any;
   async getTankerKoenigPrice():Promise<TankRoot> {
     const courses$ =
       this.http.get<TankRoot>(`https://creativecommons.tankerkoenig.de/json/list.php?lat=52.521&lng=13.438&rad=1.5&sort=dist&type=all&apikey=98d9fddc-64dd-7ac9-0889-17bac58698d3`);
+    this.response = await firstValueFrom(courses$);   
+
+    return this.response;
+  }
+
+  async getLatLng(param:string):Promise<Root5> {
+    let tt="https://geocode.maps.co/search?city="
+    tt=tt+param +"&api_key=66a9fb3faf77a476838447qokee288c"    
+    const courses$ =
+      this.http.get<Root5>(tt);
     this.response = await firstValueFrom(courses$);   
 
     return this.response;

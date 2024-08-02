@@ -2,56 +2,89 @@ import {Component, effect, inject, Injector, OnInit, signal} from '@angular/core
 import {Router, RouterLink} from "@angular/router";
 import {AuthService} from "../services/auth.service";
 import {MessagesService} from "../messages/messages.service";
-import {FormBuilder, ReactiveFormsModule} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {CoursesService} from "../services/courses.service";
 import { TankRoot, Tank,TankStation, stations1, } from '../models/course.model';
 import { HttpClient, HttpContext } from "@angular/common/http";
 import { catchError, firstValueFrom, from, map, Observable } from 'rxjs';
 import {CommonModule, NgForOf} from '@angular/common';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { Root1 } from '../models/user.model';
+import { Loc, Root1 } from '../models/user.model';
+import { LocationService } from '../services/location-service.service';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { Conditional } from '@angular/compiler';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from "@angular/material/form-field";
+interface Cities {
+  name:string;
+  plz:string;
+  strasse:string;
+}
+
 @Component({
   selector: 'login',
   standalone: true,
   imports: [
     RouterLink,
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
+
 export class LoginComponent  implements OnInit{
+  
   #courses = signal<TankRoot[]>([]) ;
   fb = inject(FormBuilder);
+  myForm = inject(FormBuilder);
   coursesService = inject(CoursesService);
   messageService = inject(MessagesService);
   http = inject(HttpClient);
   response: any;
   response1: any;
   station:any;
+  myarr: Cities[] = [];
+  ar1:any;
+  
+ 
   ngOnInit() {
-   // this.onToSignalExample();
-    this.loadCourses();
+    
+    this.addcities();
+    this.ar1=this.myarr[0];
+    console.log("QQQQQQQQQ " +this.ar1);
+     
+    this.loadbenzinPreise();
+    
   }
 
   courses:any;
   myRoot: any = [];
   myRoot1: any = [];
- 
+  location:Loc | undefined;
  
  
   form = this.fb.group({
-    email: [''],
-    password: ['']
+    city: [''],
+   
+    cyties: FormControl
+  });
+  form1 = this.myForm.group({
+   
+    cyties: FormControl
   });
 
   messagesService = inject(MessagesService);
 
   authService = inject(AuthService);
+  locationService = inject(LocationService);
 
   router = inject(Router);
-  async loadCourses() {
+  async loadbenzinPreise() {
+   
     try {
     
       this.response1= await this.coursesService.getTankerKoenigPrice() as TankRoot;
@@ -91,6 +124,8 @@ JSON.parse(JSobj);
       console.error(err);
     }
   }
+  
+
 
   async getTankerKoenigPriceWithUrl(url:string):Promise<Root1> {
     const courses$ =
@@ -101,29 +136,17 @@ console.log("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG " + JSobj)
     return this.response;
   }
 
-  async onLogin() {
-    try {
-      const {email, password} = this.form.value;
-      if (!email || !password) {
-        this.messagesService.showMessage(
-          "Enter an email and password.",
-          "error"
-        )
-        return;
-      }
-      await this.authService.login(email, password);
-      await this.router.navigate(['/home']);
-    }
-    catch(err) {
-      console.error(err);
-      this.messagesService.showMessage(
-        "Login failed, please try again",
-        "error"
-      )
-    }
+  selected(change: MatSelectChange) {
+    console.log("1111111111111  " + change.value.name );
+    this.form.controls['city'].setValue(change.value.name);
+  
   }
 
-
+  get City() {
+   
+    return this.form.controls['city'].value;
+  }
+ 
 
   injector = inject(Injector);
 
@@ -167,4 +190,65 @@ console.log( "TTTTTTTTTTT " + courses$);
     }
 
   }
+
+  addcities(){
+
+    this.myarr.push(
+      {
+        name: "Waiblingen",
+        plz: "71332",
+        strasse: "Lange Straße 30"
+        },
+        {
+          name: "Winnenden",
+          plz: "71364",
+          strasse: "Max-Eyth-Strasse 7"
+          },
+          {
+            name: "Weinstadt",
+            plz: "71384",
+            strasse: "Lützestrasse 97"
+            },
+            {
+              name: "Stuttgart",
+              plz: "71378",
+              strasse: "Mühlhäuserstrasse 271"
+              },
+              {
+                name: "Kornwestheim",
+                plz: "70806",
+                strasse: "Alexanderstrasse 18"
+                }
+
+
+    );
+  }
+/*
+   mycities: Cities[] = [
+    {
+    name: "Waiblingen",
+    plz: "71332",
+    strasse: "Lange Straße 30"
+    },
+    {
+      name: "Winnenden",
+      plz: "71364",
+      strasse: "Max-Eyth-Strasse 7"
+      },
+      {
+        name: "Weinstadt",
+        plz: "71384",
+        strasse: "Lützestrasse 97"
+        },
+        {
+          name: "Stuttgart",
+          plz: "71378",
+          strasse: "Mühlhäuserstrasse 271"
+          },
+          {
+            name: "Kornwestheim",
+            plz: "70806",
+            strasse: "Alexanderstrasse 18"
+            }
+];*/
 }

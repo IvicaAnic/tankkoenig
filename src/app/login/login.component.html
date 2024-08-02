@@ -1,16 +1,39 @@
 
-
-  <div class="login-form" [formGroup]="form">
-
-    <h3>Login</h3>
-
+<div lass="login-form1" [formGroup]="form">
   
+  <h4>Echtzeit-Benzinpreis-API 
+  Hier gibt es den einfachen Zugang zu den aktuellen Spritpreisen aller an die Markttransparenzstelle für Kraftstoffe (MTS-K) meldenden Tankstellen Deutschlands.</h4>
 
-  <div class="form-actions">
-    <button class="btn" routerLink="/home">Home</button>
+  <h5>bitte wähle eine Stadt aus oder tippe ein en Stadt, wo du die Sprit-Preise (Benzin-Diesel) abfragen möchtest</h5>
+<table>
+ 
+  <tr>
+    <td width="110px">Stadt auswählen  <label width="200">                                 </label>          </td>
+<td>
+  <mat-form-field>
+    <mat-select placeholder="select Stadt" formControlName="cyties" (selectionChange)="selected($event)" [(value)]="ar1" >
+        <ng-container *ngFor="let category of (myarr )">
+            <mat-option [value]="category">{{category.name}}</mat-option>
+        </ng-container>
+    </mat-select>
+  </mat-form-field>
+</td>
+<td>     oder Stadt eingeben</td>
+<td>
+  <mat-form-field style="text-align:left">        
+    <input matInput  formControlName="city" class="example-full-width" style="text-align:left">
+</mat-form-field>
+</td>
+</tr>
+</table> 
 
-    <button class="btn" (click)="loadCourses()">
-      Login
+ 
+
+</div>
+   
+<div>
+    <button class="btn" (click)="loadbenzinPreise()">
+      Tankerkoenig-Api Aufrufen
     </button>
 
   </div>
@@ -28,7 +51,7 @@
 
      <label> benzin e5 Preis: </label> {{item.e5}}  <label> EURO </label><br>
      <label> benzin e10 Preis: </label> {{item.e10}}  <label> EURO </label><br>
-    <label> diesel Preeis:  </label> {{item.diesel}} <label> EURO </label><br>
+    <label> diesel Preis:  </label> {{item.diesel}} <label> EURO </label><br>
      {{item.state}} <br>
     <label>#####################################################################################################</label>
    
