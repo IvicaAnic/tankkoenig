@@ -32,22 +32,32 @@ export type Station1= {
   state: any
 }
 
-export type Loc=
-{lat:number
-  lng:number}
+export type Root = Root2[]
 
-  export type Root5 = Root6[]
+export interface Root2 {
+  type: string
+  properties: Properties
+  geometry: Geometry
+}
 
-export interface Root6 {
+export interface Properties {
+  geocoding: Geocoding
+}
+
+export interface Geocoding {
   place_id: number
-  licence: string
   osm_type: string
   osm_id: number
-  boundingbox: string[]
-  lat: string
-  lon: string
-  display_name: string
-  class: string
+  osm_key: string
+  osm_value: string
   type: string
-  importance: number
+  label: string
+  name: string
 }
+
+export interface Geometry {
+  type: string
+  coordinates: number[]
+}
+
+  

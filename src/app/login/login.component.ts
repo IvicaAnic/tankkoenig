@@ -9,7 +9,7 @@ import { HttpClient, HttpContext } from "@angular/common/http";
 import { catchError, firstValueFrom, from, map, Observable } from 'rxjs';
 import {CommonModule, NgForOf} from '@angular/common';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { Loc, Root1 } from '../models/user.model';
+import {  Root,Root1 } from '../models/user.model';
 import { LocationService } from '../services/location-service.service';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { Conditional } from '@angular/compiler';
@@ -46,6 +46,7 @@ export class LoginComponent  implements OnInit{
   http = inject(HttpClient);
   response: any;
   response1: any;
+  lnglatresponse:any;
   station:any;
   myarr: Cities[] = [];
   ar1:any;
@@ -64,7 +65,8 @@ export class LoginComponent  implements OnInit{
   courses:any;
   myRoot: any = [];
   myRoot1: any = [];
-  location:Loc | undefined;
+ 
+  myRootlatlng: any = [];
  
  
   form = this.fb.group({
@@ -84,10 +86,41 @@ export class LoginComponent  implements OnInit{
 
   router = inject(Router);
   async loadbenzinPreise() {
-   
+   let lat="1";
+   let lng="1";
     try {
-    
-      this.response1= await this.coursesService.getTankerKoenigPrice() as TankRoot;
+       let ttt:any;
+      this.lnglatresponse =await this.coursesService.getLatLng("stuttgart") as Root;
+     
+      this.myRootlatlng =this.lnglatresponse.features;
+      const verifyResult = JSON.stringify(this.lnglatresponse);
+     
+      let index =verifyResult.indexOf("coordinates");
+     if(index > -1) {
+     
+      const t1=verifyResult.substring(index +14)
+      let index2 =t1.indexOf("]");
+      if(index2 > -1) {
+      const t3=t1.substring(0,index2);
+      let index1 =index +11;
+
+      console.log("999999999999999999  " +  t3);
+      let index3 =t3.indexOf(",");
+      if(index3 > -1)
+      {
+        const t4=t3.substring(0,index3);
+        const t5 =t3.substring(index3+1);
+        lat=t4;
+        lng=t5;
+        console.log("lat " + t4)
+        console.log("long " + t5)
+      }
+      }
+     }
+      
+     console.log("999999999999999999  LLLLLLLLLLLL")
+
+      this.response1= await this.coursesService.getTankerKoenigPrice(lat,lng) as TankRoot;
 this.myRoot=this.response1.stations;
 this.myRoot1=[];
       for(let i =0;i < this.myRoot.length;i++)
@@ -152,7 +185,7 @@ console.log("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG " + JSobj)
 
   onToSignalExample() {
     try {
-      const courses$:Observable<TankRoot> = from(this.coursesService.getTankerKoenigPrice())
+  /*    const courses$:Observable<TankRoot> = from(this.coursesService.getTankerKoenigPrice())
         .pipe(
           catchError(err => {
             console.log(`Error caught in catchError`, err)
@@ -178,7 +211,7 @@ console.log( "TTTTTTTTTTT " + courses$);
       })
       
 
-      this.courses()
+      this.courses()*/
 /*
       setInterval(() => {
         console.log(`Reading courses signal: `, courses())
