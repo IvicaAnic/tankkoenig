@@ -20,7 +20,11 @@ interface Cities {
   plz:string;
   strasse:string;
 }
-
+interface LngLat {
+  lng:string;
+  lat:string;
+  
+}
 @Component({
   selector: 'login',
   standalone: true,
@@ -90,6 +94,8 @@ export class LoginComponent  implements OnInit{
    let lng="1";
     try {
        let ttt:any;
+       const tt1=await this.getLngLat();
+       /*
       this.lnglatresponse =await this.coursesService.getLatLng("stuttgart") as Root;
      
       this.myRootlatlng =this.lnglatresponse.features;
@@ -118,9 +124,9 @@ export class LoginComponent  implements OnInit{
       }
      }
       
-     console.log("999999999999999999  LLLLLLLLLLLL")
+   */
 
-      this.response1= await this.coursesService.getTankerKoenigPrice(lat,lng) as TankRoot;
+      this.response1= await this.coursesService.getTankerKoenigPrice(tt1.lat,tt1.lng) as TankRoot;
 this.myRoot=this.response1.stations;
 this.myRoot1=[];
       for(let i =0;i < this.myRoot.length;i++)
@@ -183,44 +189,48 @@ console.log("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG " + JSobj)
 
   injector = inject(Injector);
 
-  onToSignalExample() {
-    try {
-  /*    const courses$:Observable<TankRoot> = from(this.coursesService.getTankerKoenigPrice())
-        .pipe(
-          catchError(err => {
-            console.log(`Error caught in catchError`, err)
-            throw err;
-          })
-        );
-    this.myRoot=courses$.pipe(map((root:TankRoot)=>root.stations as TankStation[]));
-console.log( "TTTTTTTTTTT " + courses$);
-    for(let i = 0;i <this.myRoot.length-1;i++)
-    {
-      console.log("GGGGGGGGGGGGGGGGGGGGGGG " + this.myRoot.id);
-    }
-      console.log("BBBBBBBBB " + courses$);
+ async getLngLat():Promise<LngLat>
+  {
+     let mylnglat:LngLat={
+       lng: '',
+       lat: ''
+     };
 
-       this.courses  = toSignal(courses$, {
-        injector: this.injector,
-        rejectErrors: true
-      })
-      effect(() => {
-        console.log(`Courses: `, this.courses())
-      }, {
-        injector: this.injector
-      })
+     let ttt:any;
+     this.lnglatresponse =await this.coursesService.getLatLng("stuttgart") as Root;
+    
+     this.myRootlatlng =this.lnglatresponse.features;
+     const verifyResult = JSON.stringify(this.lnglatresponse);
+    
+     let index =verifyResult.indexOf("coordinates");
+    if(index > -1) {
+    
+     const t1=verifyResult.substring(index +14)
+     let index2 =t1.indexOf("]");
+     if(index2 > -1) {
+     const t3=t1.substring(0,index2);
+     let index1 =index +11;
+     
+     let index3 =t3.indexOf(",");
+     if(index3 > -1)
+     {
+       const t4=t3.substring(0,index3);
+       const t5 =t3.substring(index3+1);
+       mylnglat.lat=t4;
+       mylnglat.lng=t5;
       
-
-      this.courses()*/
-/*
-      setInterval(() => {
-        console.log(`Reading courses signal: `, courses())
-      }, 1000)*/
-
+       console.log("lat " + t4)
+       console.log("long " + t5)
+     }
+     }
     }
-    catch (err) {
-      console.log(`Error in catch block: `, err)
-    }
+     
+    
+
+
+     return mylnglat;
+
+
 
   }
 
