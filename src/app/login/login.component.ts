@@ -54,7 +54,8 @@ export class LoginComponent  implements OnInit{
   station:any;
   myarr: Cities[] = [];
   ar1:any;
-  
+  str1:any;
+  str2:any;
  
   ngOnInit() {
     
@@ -108,7 +109,8 @@ export class LoginComponent  implements OnInit{
      this.myRoot1.push(...this.response1.stations);
       //this.response1=null;
        }
-    // this.myRoot=this.response1.stations;
+       this.str1=JSON.stringify(this.myRoot1);
+       console.log("ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ " + JSON.stringify(this.str1));
 
    
     
@@ -142,6 +144,7 @@ console.log("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG " + JSobj)
   selected(change: MatSelectChange) {
     console.log("1111111111111  " + change.value.name );
     this.form.controls['city'].setValue(change.value.name);
+    this.loadbenzinPreise();
   
   }
 
@@ -161,10 +164,12 @@ console.log("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG " + JSobj)
      };
      let myarr: LngLat[] = [];
      if(!this.City)    
-     this.lnglatresponse =await this.coursesService.getLatLng1("stuttgart") as RootLL;
+     this.lnglatresponse =await this.coursesService.getLatLng1("stuttgart-ost") as RootLL;
     else
     this.lnglatresponse =await this.coursesService.getLatLng1(this.City) as RootLL;
     this.myRootLL=this.lnglatresponse.features;
+    this.str2=JSON.stringify(this.myRootLL);
+   console.log("JJJJJJJJJJJJJJJJJJJJJJ " + this.str2);
 let tt1:any[];
     for(let i =0;i < this.myRootLL.length;i++)
       {
