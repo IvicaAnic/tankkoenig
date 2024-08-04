@@ -1,10 +1,10 @@
 
-<div lass="login-form1" [formGroup]="form">
+<div lass="login-form1" [formGroup]="form" style="text-align: center;">
   
-  <h4>Echtzeit-Benzinpreis-API 
-  Hier gibt es den einfachen Zugang zu den aktuellen Spritpreisen aller an die Markttransparenzstelle für Kraftstoffe (MTS-K) meldenden Tankstellen Deutschlands.</h4>
+  <h3>Echtzeit-Benzinpreis-API 
+  Hier gibt es den einfachen übersicht zu den aktuellen Spritpreisen aller an die Markttransparenzstelle für Kraftstoffe (MTS-K) meldenden Tankstellen Deutschlands.</h3>
 
-  <h5>bitte wähle eine Stadt aus oder tippe ein en Stadt, wo du die Sprit-Preise (Benzin-Diesel) abfragen möchtest</h5>
+  <h4>bitte wähle eine Stadt aus oder tippe ein eine Stadt, wo du die Sprit-Preise (Benzin-Diesel) abfragen möchtest</h4>
 <table>
  
   <tr>
@@ -38,7 +38,7 @@
 
   </div>
 
-  <div *ngFor="let item of myRoot1 "  width:500px>           
+  <div *ngFor="let item of myRoot1 "  width:500px style="text-align: center;">           
    
     {{item.name}} <br>
     
@@ -52,7 +52,7 @@
      <label> benzin e5 Preis: </label> {{item.e5}}  <label> EURO </label><br>
      <label> benzin e10 Preis: </label> {{item.e10}}  <label> EURO </label><br>
     <label> diesel Preis:  </label> {{item.diesel}} <label> EURO </label><br>
-     {{item.state}} <br>
+    
     <label>#####################################################################################################</label>
    
    

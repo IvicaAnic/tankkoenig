@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 
 const cors = require('cors');
 
-app.use(cors({origin: true}));
+app.use(cors());
 
 app.route('/api/courses').get(getAllCourses);
 

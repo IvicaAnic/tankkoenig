@@ -59,5 +59,36 @@ export interface Geometry {
   type: string
   coordinates: number[]
 }
+export interface RootLL {
+  type: string
+  licence: string
+  features: FeatureLL[]
+}
+
+export interface FeatureLL {
+  type: string
+  properties: PropertiesLL
+  bbox: number[]
+  geometry: GeometryLL
+}
+
+export interface PropertiesLL {
+  place_id: number
+  osm_type: string
+  osm_id: number
+  place_rank: number
+  category: string
+  type: string
+  importance: number
+  addresstype: string
+  name: string
+  display_name: string
+}
+
+export interface GeometryLL {
+  type: string
+  coordinates: number[]
+}
+
 
   

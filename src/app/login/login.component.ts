@@ -9,7 +9,7 @@ import { HttpClient, HttpContext } from "@angular/common/http";
 import { catchError, firstValueFrom, from, map, Observable } from 'rxjs';
 import {CommonModule, NgForOf} from '@angular/common';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import {  Root,Root1 } from '../models/user.model';
+import {  Root,Root1, RootLL } from '../models/user.model';
 import { LocationService } from '../services/location-service.service';
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { Conditional } from '@angular/compiler';
@@ -71,6 +71,8 @@ export class LoginComponent  implements OnInit{
   myRoot1: any = [];
  
   myRootlatlng: any = [];
+  myRootLL: any = [];
+ 
  
  
   form = this.fb.group({
@@ -92,64 +94,26 @@ export class LoginComponent  implements OnInit{
   async loadbenzinPreise() {
    let lat="1";
    let lng="1";
+   this.myRoot1=[];
     try {
        let ttt:any;
        const tt1=await this.getLngLat();
-       /*
-      this.lnglatresponse =await this.coursesService.getLatLng("stuttgart") as Root;
-     
-      this.myRootlatlng =this.lnglatresponse.features;
-      const verifyResult = JSON.stringify(this.lnglatresponse);
-     
-      let index =verifyResult.indexOf("coordinates");
-     if(index > -1) {
-     
-      const t1=verifyResult.substring(index +14)
-      let index2 =t1.indexOf("]");
-      if(index2 > -1) {
-      const t3=t1.substring(0,index2);
-      let index1 =index +11;
+       const myresp:any=[];
+       
+       for(let k=0;k<tt1.length;k++) {
+        console.log("WWWWWWWWWWWWWWWWWW " + tt1[k].lat,tt1[k].lng + "  "+ tt1.length);
+      this.response1= await this.coursesService.getTankerKoenigPrice(tt1[k].lat,tt1[k].lng) as TankRoot;
+      console.log("HHHHHHHHHHHHHHHHH " + this.response1.data);
+      //this.myRoot1 =this.response1.stations;
+     this.myRoot1.push(...this.response1.stations);
+      //this.response1=null;
+       }
+    // this.myRoot=this.response1.stations;
 
-      console.log("999999999999999999  " +  t3);
-      let index3 =t3.indexOf(",");
-      if(index3 > -1)
-      {
-        const t4=t3.substring(0,index3);
-        const t5 =t3.substring(index3+1);
-        lat=t4;
-        lng=t5;
-        console.log("lat " + t4)
-        console.log("long " + t5)
-      }
-      }
-     }
-      
-   */
-
-      this.response1= await this.coursesService.getTankerKoenigPrice(tt1.lat,tt1.lng) as TankRoot;
-this.myRoot=this.response1.stations;
-this.myRoot1=[];
-      for(let i =0;i < this.myRoot.length;i++)
-      {
-        console.log("QQQQQQQQQQQQQ " +  this.myRoot[i].id)
-        console.log("QQQQQQQQQQQQQ " +  this.myRoot[i].name)
-        let tt="https://creativecommons.tankerkoenig.de/json/detail.php?id=" + this.myRoot[i].id + "&apikey=98d9fddc-64dd-7ac9-0889-17bac58698d3"
-        this.response= await this.getTankerKoenigPriceWithUrl(tt) ;
-       this.station=this.response.station;
-       this.myRoot1.push(this.station);
-       //const JSobj = JSON.stringify(this.station);
-    //console.log("QQQQQQQQQQQQQAAAAAAAA " + tt)
-      //   console.log("QQQQQQQQQQQQQAAAAAAAA  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + JSobj)
-
-      }
    
-     //console.log("QQQQQQQQQQQQQ " +  z.data)
     
-    const JSobj = JSON.stringify(this.response1);
-    console.log("QQQQQQQQQQQQQ " +  JSobj)
-const parsedobject: TankRoot =
-JSON.parse(JSobj);
-    console.log( "WWWWWWWWWWWWWWW " + JSobj )
+    
+ 
 
 
 
@@ -157,7 +121,7 @@ JSON.parse(JSobj);
     }
     catch(err) {
       this.messageService.showMessage(
-        `Error loading courses!`,
+        `Error loading Tankenkoenig-Api!`,
         "error"
       );
       console.error(err);
@@ -189,16 +153,43 @@ console.log("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG " + JSobj)
 
   injector = inject(Injector);
 
- async getLngLat():Promise<LngLat>
+ async getLngLat():Promise<LngLat[]>
   {
      let mylnglat:LngLat={
        lng: '',
        lat: ''
      };
+     let myarr: LngLat[] = [];
+     if(!this.City)    
+     this.lnglatresponse =await this.coursesService.getLatLng1("stuttgart") as RootLL;
+    else
+    this.lnglatresponse =await this.coursesService.getLatLng1(this.City) as RootLL;
+    this.myRootLL=this.lnglatresponse.features;
+let tt1:any[];
+    for(let i =0;i < this.myRootLL.length;i++)
+      {
+          let ttr= tt1=this.myRootLL[i].geometry;
+         
+          tt1=ttr.coordinates;
+          let mylnglat:LngLat={
+            lng: '',
+            lat: ''
+          };;
+          for(let m=0;m<tt1.length;m++)
+          {
+            if(m== 0)
+            mylnglat.lat=tt1[m];
+            if(m== 1) {
+              mylnglat.lng=tt1[m];
+            myarr.push(mylnglat);
+            }
+           
 
-     let ttt:any;
-     this.lnglatresponse =await this.coursesService.getLatLng("stuttgart") as Root;
-    
+          }
+
+
+      }
+    /*
      this.myRootlatlng =this.lnglatresponse.features;
      const verifyResult = JSON.stringify(this.lnglatresponse);
     
@@ -223,12 +214,12 @@ console.log("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG " + JSobj)
        console.log("long " + t5)
      }
      }
-    }
+    }*/
      
     
 
 
-     return mylnglat;
+     return myarr;
 
 
 

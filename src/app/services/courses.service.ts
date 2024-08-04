@@ -5,7 +5,7 @@ import {firstValueFrom, Observable} from "rxjs";
 import {Course,TankRoot,Tank, } from "../models/course.model";
 import {GetCoursesResponse, GetTankResponse} from "../models/get-courses.response";
 import {SkipLoading} from "../loading/skip-loading.component";
-import {  Root } from "../models/user.model";
+import {  Root, RootLL } from "../models/user.model";
 
 
 
@@ -44,6 +44,17 @@ response:any;
   
     const courses$ =
       this.http.get<Root>(tt);
+    const response = await firstValueFrom(courses$);   
+    console.log("link 44444444444444 " + courses$);
+    return response;
+  }
+
+  async getLatLng1(param:string):Promise<RootLL> {
+    let tt="https://nominatim.openstreetmap.org/search?q="
+    tt=tt+param +"&format=geocodejson";  
+  
+    const courses$ =
+      this.http.get<RootLL>(tt);
     const response = await firstValueFrom(courses$);   
     console.log("link 44444444444444 " + courses$);
     return response;
